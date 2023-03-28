@@ -1,0 +1,29 @@
+
+<%-include("header")-%>           <!-- Added header template -->
+
+<div class="box" id="heading">
+      <h1 style="color: black;"><%=DayName%></h1>
+    </div>
+    <div class="box" id="heading">
+      <h1><%=place%></h1>
+</div>
+
+<div class="box">
+      <ul>
+        <%for(var i=0;i<nwItm.length;i++){%>
+          <form action="/delete" method="post">
+          <div class="item">
+            <input type="checkbox" onchange="this.form.submit()" name="chk" value="<%=nwItm[i]._id%>">
+            <p><%=nwItm[i].Name%></p>
+          </div>
+          <input type="hidden" name="title" value="<%=place%>">
+        </form>
+        <%}%>
+      </ul>
+      <form action="/" method="post">
+        <input  type="text" name="item" placeholder=" Add New Task" autocomplete="off"/>
+        <button  type="submit" name="button" value="<%=place%>">+</button> <!-- Value is for sending the domain name created-->
+      </form>
+</div>
+    
+<%-include("footer")-%>           <!-- Added footer template -->
