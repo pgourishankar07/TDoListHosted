@@ -1,7 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const bp = require("body-parser");
 const date = require(__dirname + "/public/js/date.js");
 const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 const app = express();
 const _ = require("lodash");
 
@@ -14,7 +16,9 @@ app.use(express.static("public"));
 // mongoose.connect("mongodb://localhost:27017/todolistdb");  // for connecting with the local DB storage
 
 //_______next line is for connecting with the cloud storage atalas
-mongoose.connect("mongodb+srv://pgourishankar04:XSdUNIQINFe8UeX9@cluster0.shn3qtn.mongodb.net/todolistdb");
+mongoose.connect(
+  `mongodb+srv://pgourishankar04:${process.env.PASSWD}@cluster0.shn3qtn.mongodb.net/todolistdb`
+);
 //replace                       |admin        | |    password  |                              | dbname
 
 const taskSchema = new mongoose.Schema({
@@ -49,8 +53,6 @@ app.get("/", (req, res) => {
       tasks.insertMany(homeTask, (err) => {
         if (err) {
           console.log(err);
-        } else {
-          console.log("");
         }
       });
       res.redirect("/");
@@ -64,7 +66,6 @@ app.get("/", (req, res) => {
     }
   });
 });
-console.log();
 // ____________________Rendering the custom page_____________________________________
 
 app.get("/about", (req, res) => {
@@ -125,8 +126,6 @@ app.post("/delete", (req, res) => {
     tasks.deleteOne({ _id: taskId }, (err) => {
       if (err) {
         console.log(err);
-      } else {
-        console.log("");
       }
     });
     res.redirect("/");
@@ -137,7 +136,6 @@ app.post("/delete", (req, res) => {
       { $pull: { list: { _id: taskId } } },
       (err, data) => {
         if (!err) {
-          console.log("");
           res.redirect("/" + listName);
         }
       }
